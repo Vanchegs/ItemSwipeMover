@@ -30,6 +30,10 @@ namespace Internal.Codebase.SwipeSystem
         private void StartDragging()
         {
             item = RayLaunch();
+            
+            if (item == null)
+                return;
+            
             startTouchPosition = Input.mousePosition;
             isDragging = true;
         }
@@ -39,10 +43,13 @@ namespace Internal.Codebase.SwipeSystem
             var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             
             Physics.Raycast(ray, out var hitInfo);
-            
-            if (!hitInfo.collider.CompareTag("Item"))
+
+            if (hitInfo.collider == null)
+            {
                 Debug.Log("Не попал");
-            
+                return null;
+            }
+
             return item = hitInfo.collider.GetComponent<Item>();
         }
 
